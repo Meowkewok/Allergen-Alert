@@ -1,0 +1,73 @@
+/* style.css */
+body {
+    width: 230px;
+    padding: 20px;
+    background-color: #1e1e1e; /* Deep Charcoal from the green version */
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 0;
+    color: #00a2ff; /* Light Electric Blue */
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.options-group {
+    margin: 20px 0;
+}
+
+/* This forces them to stack vertically */
+label {
+    display: block; 
+    margin: 15px 0;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+label:hover {
+    color: #00a2ff;
+}
+
+input[type="checkbox"] {
+    margin-right: 12px;
+    accent-color: #00a2ff; /* Colors the box light blue */
+    transform: scale(1.2);
+    vertical-align: middle;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #00a2ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #0088d6;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#resultsArea {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #2a2a2a; /* Slightly lighter than body for contrast */
+    border-radius: 6px;
+    min-height: 40px;
+    border: 1px solid #333;
+    word-wrap: break-word;
+}
