@@ -7,22 +7,21 @@
     <h1>Allergen Alert!</h1>
     
     <div class="options-group">
-        <label><input type="checkbox" id="SoyCheckbox"> Enable Soy Allergens</label>
-        <label><input type="checkbox" id="DairyCheckbox"> Enable Dairy Allergens</label>
-        <label><input type="checkbox" id="NutsCheckbox"> Enable Nut Allergens</label>
-        <!-- New Dietary Selectors -->
-        <label><input type="checkbox" id="KashrutCheckbox"> Enable Kashrut Restrictions</label>
-        <label><input type="checkbox" id="VegCheckbox"> Enable Vegetarian Mode</label>
+        <label><input type="checkbox" id="SoyCheckbox"> Soy Allergens</label>
+        <label><input type="checkbox" id="DairyCheckbox"> Dairy Allergens</label>
+        <label><input type="checkbox" id="PeanutCheckbox"> Peanut Allergens</label>
+        <label><input type="checkbox" id="TreeNutCheckbox"> Tree Nut Allergens</label>
+        <label><input type="checkbox" id="GlutenCheckbox"> Gluten/Wheat</label>
+        <hr>
+        <label><input type="checkbox" id="KashrutCheckbox"> Kashrut Restrictions</label>
+        <label><input type="checkbox" id="VegCheckbox"> Vegetarian Mode</label>
     </div>
 
-    <!-- Main action buttons -->
     <button id="scanBtn">Check for Allergens</button>
     <button id="subBtn" style="background-color: #0056b3; margin-top: 10px;">Check Substitutes</button>
 
-    <!-- This is where the results will appear -->
     <div id="resultsArea"></div>
 
-    <!-- Script order is vital: data first, then logic -->
     <script src="data.js"></script>
     <script src="popup.js"></script>
 </body>

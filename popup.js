@@ -2,24 +2,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const scanBtn = document.getElementById('scanBtn');
     const subBtn = document.getElementById('subBtn');
     const resultsArea = document.getElementById('resultsArea');
-    
+
     // Checkbox references
     const soyCheck = document.getElementById('SoyCheckbox');
     const dairyCheck = document.getElementById('DairyCheckbox');
-    const nutsCheck = document.getElementById('NutsCheckbox');
+    const peanutCheck = document.getElementById('PeanutCheckbox');
+    const treeNutCheck = document.getElementById('TreeNutCheckbox');
+    const glutenCheck = document.getElementById('GlutenCheckbox');
     const kashrutCheck = document.getElementById('KashrutCheckbox');
     const vegCheck = document.getElementById('VegCheckbox');
+
+    const checkboxes = [soyCheck, dairyCheck, peanutCheck, treeNutCheck, glutenCheck, kashrutCheck, vegCheck];
 
     const capitalize = (str) => {
         if (!str) return "";
         return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
     };
 
-    // LOAD saved settings (added kashrut and veg)
-    chrome.storage.local.get(['soy', 'dairy', 'nuts', 'kashrut', 'veg'], (result) => {
+    // LOAD saved settings
+    chrome.storage.local.get(['soy', 'dairy', 'peanuts', 'treeNuts', 'gluten', 'kashrut', 'veg'], (result) => {
         if (result.soy) soyCheck.checked = result.soy;
         if (result.dairy) dairyCheck.checked = result.dairy;
-        if (result.nuts) nutsCheck.checked = result.nuts;
+        if (result.peanuts) peanutCheck.checked = result.peanuts;
+        if (result.treeNuts) treeNutCheck.checked = result.treeNuts;
+        if (result.gluten) glutenCheck.checked = result.gluten;
         if (result.kashrut) kashrutCheck.checked = result.kashrut;
         if (result.veg) vegCheck.checked = result.veg;
     });
@@ -29,21 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.local.set({
             soy: soyCheck.checked,
             dairy: dairyCheck.checked,
-            nuts: nutsCheck.checked,
+            peanuts: peanutCheck.checked,
+            treeNuts: treeNutCheck.checked,
+            gluten: glutenCheck.checked,
             kashrut: kashrutCheck.checked,
             veg: vegCheck.checked
         });
         resultsArea.innerHTML = "";
     };
 
-    [soyCheck, dairyCheck, nutsCheck, kashrutCheck, vegCheck].forEach(el => el.addEventListener('change', saveSettings));
+    checkboxes.forEach(el => el.addEventListener('change', saveSettings));
 
-    // Build the master list (added kashrut and veg logic)
+    // Build the master list
     const getActiveAllergenList = () => {
         let list = [];
         if (soyCheck.checked) list = list.concat(ALLERGEN_DATA.soy);
         if (dairyCheck.checked) list = list.concat(ALLERGEN_DATA.dairy);
-        if (nutsCheck.checked) list = list.concat(ALLERGEN_DATA.nuts);
+        if (peanutCheck.checked) list = list.concat(ALLERGEN_DATA.peanuts);
+        if (treeNutCheck.checked) list = list.concat(ALLERGEN_DATA.treeNuts);
+        if (glutenCheck.checked) list = list.concat(ALLERGEN_DATA.gluten);
         if (kashrutCheck.checked) list = list.concat(ALLERGEN_DATA.kashrut);
         if (vegCheck.checked) list = list.concat(ALLERGEN_DATA.vegetarian);
         return list;
@@ -57,8 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         resultsArea.innerHTML = "<div style='color: #888;'>Scanning page...</div>";
-        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        
         chrome.tabs.sendMessage(tab.id, { action: "checkWords", list: list }, (response) => {
             if (chrome.runtime.lastError) {
                 resultsArea.innerHTML = "<div style='color: #ff4d4d;'>Error: Refresh the website.</div>";
@@ -66,14 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (response && response.found) {
-                let html = isSubCheck 
-                    ? "<b style='color: #00a2ff;'>Substitutions:</b><br>" 
-                    : "<b style='color: #ff4d4d;'>Warning - Items Found:</b><br>";
-
+                let html = isSubCheck ? "<b style='color: #00a2ff;'>Substitutions:</b><br>" : "<b style='color: #ff4d4d;'>Warning - Items Found:</b><br>";
+                
                 response.matches.forEach(item => {
                     const displayWord = capitalize(item.word);
-                    const displaySub = item.sub; 
-
+                    const displaySub = item.sub;
                     if (isSubCheck) {
                         html += `<div style='margin-top: 8px; font-size: 13px;'>
                                     <span style='color: #eee;'>- ${displayWord}:</span> 
